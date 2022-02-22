@@ -1,6 +1,6 @@
 name: ItemBuilder
 version: '${project.version}'
-main: dev.ruster.itembuilder.ItemBuilder
+main: dev.ruster.itembuilder.Main
 api-version: 1.18
 depend: [ ProtocolLib ]
 authors: [ Ruster ]
