@@ -1,7 +1,7 @@
 name: ItemBuilder
 version: '${project.version}'
-main: dev.ruster.itembuilder.Main
-api-version: 1.18
-depend: [ ProtocolLib ]
+main: dev.ruster.itembuilder.ItemBuilder
+api-version: 1.18.2
+#depend: [ ProtocolLib ]
 authors: [ Ruster ]
 description: A simple API to create ItemStack easier
