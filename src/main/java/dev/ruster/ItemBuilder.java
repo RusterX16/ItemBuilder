@@ -5,13 +5,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class ItemBuilder {
 
     private final ItemStack item;
     private final ItemMeta meta;
-    private final Lore lore = new Lore(this);
+    private final List<String> lore = new ArrayList<>();
     private Material material;
     private String displayName;
     private int amount;
@@ -69,18 +72,9 @@ public class ItemBuilder {
      * @param material The material to set
      */
     public ItemBuilder material(Material material) {
-        item.setType(material);
         this.material = material;
+        item.setType(material);
         return this;
-    }
-
-    /**
-     * Get the material type of the item
-     *
-     * @return The material
-     */
-    public Material material() {
-        return material;
     }
 
     /**
@@ -95,41 +89,59 @@ public class ItemBuilder {
     }
 
     /**
-     * Get the item display name
-     *
-     * @return The display name
-     */
-    public String displayName() {
-        return displayName;
-    }
-
-    /**
      * Define an item lore
+     * overrides existing lore
      *
-     * @param lore The Lore to copy from
-     */
-    public ItemBuilder lore(@NotNull Lore lore) {
-        this.lore.set(lore.toList());
-        return this;
-    }
-
-    /**
-     * Define an item lore
-     *
-     * @param lore The ArrayList containing the lines you want to display as lore
+     * @param lore A collection of lines to set as lore
      */
     public ItemBuilder lore(List<String> lore) {
-        this.lore.set(lore);
+        this.lore.addAll(lore);
+        meta.setLore(lore);
         return this;
     }
 
     /**
-     * Get the item lore
+     * Define an item lore
+     * overrides existing lore
      *
-     * @return The lore
+     * @param lines the lines set as lore
      */
-    public Lore lore() {
-        return lore;
+    public ItemBuilder lore(String... lines) {
+        this.lore.addAll(List.of(lines));
+        meta.setLore(lore);
+        return this;
+    }
+
+    public ItemBuilder appendLoreLine(String line) {
+        lore.add(line);
+        meta.setLore(lore);
+        return this;
+    }
+
+    public ItemBuilder setLoreLine(int index, String line, boolean override) {
+        if(override) {
+            lore.set(index, line);
+        } else {
+            lore.add(index, line);
+        }
+        meta.setLore(lore);
+        return this;
+    }
+
+    public ItemBuilder setLoreLine(int index, String line) {
+        return setLoreLine(index, line, false);
+    }
+
+    public ItemBuilder removeLoreLine(int index) {
+        lore.remove(index);
+        meta.setLore(lore);
+        return this;
+    }
+
+    public ItemBuilder removeLoreLine(String line) {
+        lore.removeAll(Collections.singleton(line));
+        meta.setLore(lore);
+        return this;
     }
 
     /**
@@ -138,18 +150,9 @@ public class ItemBuilder {
      * @param amount The amount to set
      */
     public ItemBuilder amount(int amount) {
-        item.setAmount(amount);
         this.amount = amount;
+        item.setAmount(amount);
         return this;
-    }
-
-    /**
-     * Get the amount of the item
-     *
-     * @return The amount
-     */
-    public int amount() {
-        return amount;
     }
 
     /**
@@ -160,6 +163,42 @@ public class ItemBuilder {
     public ItemStack build() {
         item.setItemMeta(meta);
         return item;
+    }
+
+    /**
+     * Get the material type of the item
+     *
+     * @return The material
+     */
+    public Material getMaterial() {
+        return material;
+    }
+
+    /**
+     * Get the amount of the item
+     *
+     * @return The amount
+     */
+    public int getAmount() {
+        return amount;
+    }
+
+    /**
+     * Get the item display name
+     *
+     * @return The display name
+     */
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    /**
+     * Get the item lore
+     *
+     * @return The lore
+     */
+    public List<String> getLore() {
+        return lore;
     }
 
     @Override
