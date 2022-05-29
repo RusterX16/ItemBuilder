@@ -116,9 +116,23 @@ public class ItemBuilder {
         meta.displayName(Component.text(displayName));
         return this;
     }
-    
+
+    /**
+     * Color a display name with the given color
+     * @param color The color
+     * @return The ItemBuilder
+     */
     public ItemBuilder colorName(ChatColor color) {
         return displayName(color + displayName);
+    }
+
+    /**
+     * Color a display name with the given code
+     * @param code The color code
+     * @return The ItemBuilder
+     */
+    public ItemBuilder colorName(String code) {
+        return colorName(ChatColor.getByChar(code));
     }
 
     /**
