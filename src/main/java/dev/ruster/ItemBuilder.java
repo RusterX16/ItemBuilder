@@ -1,11 +1,14 @@
 package dev.ruster;
 
+import net.kyori.adventure.text.Component;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -110,8 +113,12 @@ public class ItemBuilder {
      */
     public ItemBuilder displayName(String displayName) {
         this.displayName = displayName;
-        meta.setDisplayName(displayName);
+        meta.displayName(Component.text(displayName));
         return this;
+    }
+    
+    public ItemBuilder colorName(ChatColor color) {
+        return displayName(color + displayName);
     }
 
     /**
@@ -332,6 +339,7 @@ public class ItemBuilder {
         return durability((short) (item.getMaxItemUseDuration() - damage));
     }
 
+    @Contract(value = "null -> false", pure = true)
     @Override
     public boolean equals(Object obj) {
         if(obj == this) {
