@@ -143,6 +143,7 @@ public class ItemBuilder {
      * @return The ItemBuilder
      */
     public ItemBuilder lore(List<String> lore) {
+        clearLore();
         this.lore.addAll(lore);
         meta.setLore(lore);
         return this;
@@ -156,6 +157,7 @@ public class ItemBuilder {
      * @return The ItemBuilder
      */
     public ItemBuilder lore(String... lines) {
+        clearLore();
         this.lore.addAll(List.of(lines));
         meta.setLore(lore);
         return this;
