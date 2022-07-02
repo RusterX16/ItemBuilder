@@ -2,12 +2,14 @@ package dev.ruster;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,6 +27,7 @@ public class ItemBuilder {
     private String displayName;
     private int amount;
     private short durability;
+    private boolean unbreakable;
 
     /**
      * Create a new ItemBuilder
@@ -45,7 +48,9 @@ public class ItemBuilder {
                 displayName = meta.getDisplayName();
             }
             if(meta.hasLore()) {
-                lore.addAll(meta.getLore());
+                if(meta.hasLore()) {
+                    lore.addAll(meta.getLore());
+                }
             }
             flags.addAll(meta.getItemFlags());
             durability = (short) ((Damageable) meta).getDamage();
@@ -64,6 +69,8 @@ public class ItemBuilder {
         damageable = (Damageable) meta;
         this.material = material;
         this.amount = amount;
+        durability = material.getMaxDurability();
+        unbreakable = false;
     }
 
     /**
@@ -88,6 +95,7 @@ public class ItemBuilder {
         displayName = builder.displayName;
         amount = builder.amount;
         durability = builder.durability;
+        unbreakable = builder.unbreakable;
         lore.addAll(builder.lore);
         flags.addAll(builder.flags);
         enchantments.putAll(builder.enchantments);
@@ -114,11 +122,13 @@ public class ItemBuilder {
     public ItemBuilder displayName(String displayName) {
         this.displayName = displayName;
         meta.displayName(Component.text(displayName));
+        item.setItemMeta(meta);
         return this;
     }
 
     /**
      * Color a display name with the given color
+     *
      * @param color The color
      * @return The ItemBuilder
      */
@@ -128,6 +138,7 @@ public class ItemBuilder {
 
     /**
      * Color a display name with the given code
+     *
      * @param code The color code
      * @return The ItemBuilder
      */
@@ -146,6 +157,7 @@ public class ItemBuilder {
         clearLore();
         this.lore.addAll(lore);
         meta.setLore(lore);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -160,6 +172,7 @@ public class ItemBuilder {
         clearLore();
         this.lore.addAll(List.of(lines));
         meta.setLore(lore);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -172,6 +185,7 @@ public class ItemBuilder {
     public ItemBuilder appendLoreLine(String line) {
         lore.add(line);
         meta.setLore(lore);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -190,6 +204,7 @@ public class ItemBuilder {
             lore.add(index, line);
         }
         meta.setLore(lore);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -214,6 +229,7 @@ public class ItemBuilder {
     public ItemBuilder removeLoreLine(int index) {
         lore.remove(index);
         meta.setLore(lore);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -226,6 +242,7 @@ public class ItemBuilder {
     public ItemBuilder removeLoreLine(String line) {
         lore.removeAll(Collections.singleton(line));
         meta.setLore(lore);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -237,6 +254,7 @@ public class ItemBuilder {
     public ItemBuilder clearLore() {
         lore.clear();
         meta.setLore(lore);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -249,6 +267,7 @@ public class ItemBuilder {
     public ItemBuilder hideFlag(ItemFlag... flags) {
         this.flags.addAll(List.of(flags));
         meta.addItemFlags(flags);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -270,6 +289,7 @@ public class ItemBuilder {
     public ItemBuilder showFlag(ItemFlag... flags) {
         List.of(flags).forEach(this.flags::remove);
         meta.removeItemFlags(flags);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -285,12 +305,14 @@ public class ItemBuilder {
     public ItemBuilder enchantment(Map<Enchantment, Integer> enchantments) {
         this.enchantments.putAll(enchantments);
         enchantments.forEach((e, i) -> meta.addEnchant(e, i, true));
+        item.setItemMeta(meta);
         return this;
     }
 
     public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
         enchantments.put(enchantment, level);
         meta.addEnchant(enchantment, level, true);
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -301,6 +323,7 @@ public class ItemBuilder {
                     enchantments.remove(enchantment, level);
                     meta.removeEnchant(e.getKey());
                 });
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -309,6 +332,7 @@ public class ItemBuilder {
             this.enchantments.remove(e);
             meta.removeEnchant(e);
         });
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -319,6 +343,7 @@ public class ItemBuilder {
                     enchantments.remove(key);
                     meta.removeEnchant(key);
                 }));
+        item.setItemMeta(meta);
         return this;
     }
 
@@ -342,6 +367,20 @@ public class ItemBuilder {
     public ItemBuilder durability(short durability) {
         this.durability = durability;
         damageable.setDamage(durability);
+        item.setItemMeta((ItemMeta) damageable);
+        return this;
+    }
+
+    /**
+     * Color the item.<br>
+     * Only available for item that supports LeatherArmorMeta.
+     * @param color The color to apply
+     * @return the ItemBuilder
+     */
+    public ItemBuilder dye(Color color) {
+        LeatherArmorMeta armor = (LeatherArmorMeta) this.meta;
+        armor.setColor(color);
+        item.setItemMeta(armor);
         return this;
     }
 
@@ -353,6 +392,18 @@ public class ItemBuilder {
      */
     public ItemBuilder damage(short damage) {
         return durability((short) (item.getMaxItemUseDuration() - damage));
+    }
+
+    /**
+     * Set the item unbreakable
+     * @param unbreakable <br><b>true</b> : The item will never take damage<br><b>false</b> : Basic behavior of an item
+     * @return the ItemBuilder
+     */
+    public ItemBuilder unbreakable(boolean unbreakable) {
+        this.unbreakable = unbreakable;
+        meta.setUnbreakable(true);
+        item.setItemMeta(meta);
+        return this;
     }
 
     @Contract(value = "null -> false", pure = true)
@@ -387,7 +438,6 @@ public class ItemBuilder {
      * @return The ItemStack
      */
     public ItemStack build() {
-        item.setItemMeta(damageable);
         return item;
     }
 
