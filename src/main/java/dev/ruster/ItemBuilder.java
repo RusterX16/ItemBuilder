@@ -364,11 +364,21 @@ public class ItemBuilder {
      * @param durability The new durability of the item
      * @return The ItemBuilder
      */
-    public ItemBuilder durability(short durability) {
+    public ItemBuilder damage(short durability) {
         this.durability = durability;
         damageable.setDamage(durability);
-        item.setItemMeta((ItemMeta) damageable);
+        item.setItemMeta(damageable);
         return this;
+    }
+
+    /**
+     * Damage the item. The value given will be subtracted to the current item life.
+     *
+     * @param damage The damage to deal
+     * @return The ItemBuilder
+     */
+    public ItemBuilder durability(short damage) {
+        return damage((short) (item.getMaxItemUseDuration() - damage));
     }
 
     /**
@@ -382,16 +392,6 @@ public class ItemBuilder {
         armor.setColor(color);
         item.setItemMeta(armor);
         return this;
-    }
-
-    /**
-     * Damage the item. The value given will be subtracted to the current item life.
-     *
-     * @param damage The damage to deal
-     * @return The ItemBuilder
-     */
-    public ItemBuilder damage(short damage) {
-        return durability((short) (item.getMaxItemUseDuration() - damage));
     }
 
     /**
