@@ -62,6 +62,10 @@
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
+        <repository>
+            <id>singleton</id>
+            <url>/home/eliott/.m2/repository/dev/ruster/Singleton</url>
+        </repository>
     </repositories>
 
     <dependencies>

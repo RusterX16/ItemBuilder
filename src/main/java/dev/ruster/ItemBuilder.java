@@ -4,6 +4,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -13,9 +15,20 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.util.*;
 
+/**
+ * <p><strong>Please do not remove these lines !!</strong></p>
+ * <p>ItemBuilder is a tiny Java API for Spigot and Paper that helps you to create ItemStack instance way much easier</p>
+ * <p>You're free to use this class and contribute to the project</p>
+ * <p>For any question, info or bug, please contact me from my GtiHub profile down below</p>
+ * @author RusterX16
+ * @link <a href="https://github.com/RusterX16/ItemBuilder">github</a>
+ */
 public class ItemBuilder {
+
+    private static final List<ItemBuilder> ITEM_BUILDERS = new LinkedList<>();
 
     private final ItemStack item;
     private final ItemMeta meta;
@@ -55,6 +68,18 @@ public class ItemBuilder {
             flags.addAll(meta.getItemFlags());
             durability = (short) ((Damageable) meta).getDamage();
         }
+        final FileConfiguration config = YamlConfiguration.loadConfiguration(new File("itembuilder.yml"));
+
+        if(config.getBoolean("storeItemBuilder")) {
+            ITEM_BUILDERS.add(this);
+        }
+    }
+
+    public static ItemBuilder from(@NotNull ItemStack item) {
+        return ITEM_BUILDERS.stream()
+                .filter(ib -> ib.item.equals(item))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
