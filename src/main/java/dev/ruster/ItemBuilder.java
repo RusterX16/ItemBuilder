@@ -6,8 +6,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +14,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.*;
 
 /**
@@ -30,6 +27,7 @@ import java.util.*;
  */
 @ToString
 @EqualsAndHashCode
+@SuppressWarnings("unused")
 public class ItemBuilder {
 
     /**
@@ -37,7 +35,7 @@ public class ItemBuilder {
      * <p>It used for recover the ItemBuilder instance from ItemStack anywhere on your code.</p>
      * <p>You can disable it from <b>config.yml</b> if you're not using this feature at all to save memory.</p>
      */
-    private static final List<ItemBuilder> ITEM_BUILDERS = new LinkedList<>();
+    private static final List<ItemBuilder> ITEM_BUILDER_LIST = new LinkedList<>();
 
     /**
      * The ItemStack instance
@@ -53,6 +51,7 @@ public class ItemBuilder {
     private int amount;
     private short durability;
     private boolean unbreakable;
+    private boolean save = false;
 
     /**
      * Create a new ItemBuilder
@@ -63,7 +62,6 @@ public class ItemBuilder {
         this.item = new ItemStack(item);
         material = item.getType();
         amount = item.getAmount();
-        durability = item.getDurability();
         enchantments.putAll(item.getEnchantments());
         meta = item.getItemMeta();
         damageable = (Damageable) meta;
@@ -73,15 +71,10 @@ public class ItemBuilder {
                 displayName = meta.displayName();
             }
             if(meta.hasLore()) {
-                lore.addAll(meta.lore());
+                lore.addAll(Objects.requireNonNull(meta.lore()));
             }
             flags.addAll(meta.getItemFlags());
             durability = (short) ((Damageable) meta).getDamage();
-        }
-        final FileConfiguration config = YamlConfiguration.loadConfiguration(new File("itembuilder.yml"));
-
-        if(config.getBoolean("storeItemBuilder")) {
-            ITEM_BUILDERS.add(this);
         }
     }
 
@@ -127,6 +120,8 @@ public class ItemBuilder {
         lore.addAll(builder.lore);
         flags.addAll(builder.flags);
         enchantments.putAll(builder.enchantments);
+        save = builder.save;
+        item.setItemMeta(meta);
     }
 
     /**
@@ -136,7 +131,17 @@ public class ItemBuilder {
      * @return The ItemBuilder instance if exists in the list, <b>null</b> otherwise.
      */
     public static ItemBuilder from(@NotNull ItemStack item) {
-        return ITEM_BUILDERS.stream().filter(ib -> ib.item.equals(item)).findFirst().orElse(null);
+        return ITEM_BUILDER_LIST.stream().filter(ib -> ib.item == item).findFirst().orElse(null);
+    }
+
+    /**
+     * Save the instance into a Collection that allow you to recover it from anywhere in your code in case of modifying
+     * @return The ItemBuilder
+     */
+    public ItemBuilder save() {
+        ITEM_BUILDER_LIST.add(this);
+        this.save = true;
+        return this;
     }
 
     /**
@@ -450,19 +455,6 @@ public class ItemBuilder {
     }
 
     /**
-     * Get the instance of the ItemBuilder by a given ItemStack
-     *
-     * @param item The ItemStack to get from
-     * @return The ItemBuilder instance
-     */
-    public ItemBuilder getFromItemStack(@NotNull ItemStack item) {
-        if(item.isSimilar(this.item)) {
-            return this;
-        }
-        return null;
-    }
-
-    /**
      * Get the ItemStack
      *
      * @return The ItemStack
@@ -541,5 +533,15 @@ public class ItemBuilder {
      */
     public boolean hasFlags() {
         return !flags.isEmpty();
+    }
+
+    /**
+     * Check if the item is unbreakable or not
+     * @return The state of the item breakability<br>
+     * <b>true</b> if unbreakable<br>
+     * <b>false</b> if breakable<br>
+     */
+    public boolean isUnbreakable() {
+        return unbreakable;
     }
 }
