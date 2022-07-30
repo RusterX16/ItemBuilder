@@ -35,7 +35,7 @@ Use the `save()` method to save the ItemBuilder instance to the momery if you wa
 ItemStack sword = new ItemBuilder(Material.IRON_SWORD)
         .addEnchantment(Enchantment.DAMAGE_ALL, 5)
         .hideFlags()
-        .unbreakable()
+        .unbreakable(true)
         .save()
         .build();
 </pre>
