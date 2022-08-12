@@ -325,7 +325,7 @@ public class ItemBuilder {
      * Add ItemFlag to the item
      *
      * @param flags The flag to show
-     * @return THe ItemBuilder
+     * @return The ItemBuilder
      */
     public ItemBuilder showFlag(ItemFlag... flags) {
         List.of(flags).forEach(this.flags::remove);
@@ -343,6 +343,11 @@ public class ItemBuilder {
         return showFlag(ItemFlag.values());
     }
 
+    /**
+    * Add some enchantments to the item by passing a Map in parameter
+    * @param enchantments The Map of enchantements
+    * @return The ItemBuilder
+     */
     public ItemBuilder enchantment(Map<Enchantment, Integer> enchantments) {
         this.enchantments.putAll(enchantments);
         enchantments.forEach((e, i) -> meta.addEnchant(e, i, true));
@@ -350,6 +355,12 @@ public class ItemBuilder {
         return this;
     }
 
+    /**
+     * Add an single enchantment to the item
+     * @param enchantment The enchantement to add
+     * @param level The level of the enchantment
+     * @return The ItemBuilder
+     */
     public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
         enchantments.put(enchantment, level);
         meta.addEnchant(enchantment, level, true);
@@ -357,6 +368,12 @@ public class ItemBuilder {
         return this;
     }
 
+    /**
+     * Remove all echantment from the item that match with the enchantement and the given level
+     * @param enchantment The enchantment to remove
+     * @param level The level of the enchantment to remove
+     * @return
+     */
     public ItemBuilder removeEnchantment(Enchantment enchantment, int level) {
         enchantments.entrySet().stream().filter(e -> e.getValue() == level).forEach(e -> {
             enchantments.remove(enchantment, level);
@@ -366,6 +383,11 @@ public class ItemBuilder {
         return this;
     }
 
+    /**
+     * Remove some enchantments from the item by a collection of enchantments given in parameter
+     * @param enchantments The enchantements to remove
+     * @return The ItemBuilder
+     */
     public ItemBuilder removeEnchantments(Enchantment... enchantments) {
         List.of(enchantments).forEach(e -> {
             this.enchantments.remove(e);
@@ -375,6 +397,11 @@ public class ItemBuilder {
         return this;
     }
 
+    /**
+     * Remove some enchantments from the item by a collection of level that match the enchantments given in parameter
+     * @param levels The levels of enchantments to remove
+     * @return The ItemBuilder
+     */
     public ItemBuilder removeEnchantments(int @NotNull ... levels) {
         enchantments.forEach((key, value) -> Arrays.stream(levels).filter(l -> value == l).forEach(l -> {
             enchantments.remove(key);

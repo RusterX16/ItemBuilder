@@ -17,6 +17,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub RusterX16 Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/RusterX16/ItemBuilder</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <plugins>
             <plugin>
