@@ -164,7 +164,7 @@ public class ItemBuilder {
      */
     public ItemBuilder displayName(String displayName) {
         this.displayName = Component.text(displayName);
-        meta.displayName(Component.text(displayName));
+        meta.displayName(this.displayName);
         item.setItemMeta(meta);
         return this;
     }
