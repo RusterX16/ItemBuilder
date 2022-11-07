@@ -66,11 +66,11 @@ public class ItemBuilder {
         meta = item.getItemMeta();
         damageable = (Damageable) meta;
 
-        if(item.hasItemMeta()) {
-            if(meta.hasDisplayName()) {
+        if (item.hasItemMeta()) {
+            if (meta.hasDisplayName()) {
                 displayName = meta.displayName();
             }
-            if(meta.hasLore()) {
+            if (meta.hasLore()) {
                 lore.addAll(Objects.requireNonNull(meta.lore()));
             }
             flags.addAll(meta.getItemFlags());
@@ -127,6 +127,7 @@ public class ItemBuilder {
     /**
      * <p>Get the ItemBuilder instance from the ItemStack one.</p>
      * <p>Will return <b>null</b> if the ItemStack hasn't been created from ItemBuilder class</p>
+     *
      * @param item The ItemStack
      * @return The ItemBuilder instance if exists in the list, <b>null</b> otherwise.
      */
@@ -136,6 +137,7 @@ public class ItemBuilder {
 
     /**
      * Save the instance into a Collection that allow you to recover it from anywhere in your code in case of modifying
+     *
      * @return The ItemBuilder
      */
     public ItemBuilder save() {
@@ -239,7 +241,7 @@ public class ItemBuilder {
     public ItemBuilder setLoreLine(int index, String line, boolean override) {
         final Component component = Component.text(line);
 
-        if(override) {
+        if (override) {
             lore.set(index, component);
         } else {
             lore.add(index, component);
@@ -344,9 +346,10 @@ public class ItemBuilder {
     }
 
     /**
-    * Add some enchantments to the item by passing a Map in parameter
-    * @param enchantments The Map of enchantements
-    * @return The ItemBuilder
+     * Add some enchantments to the item by passing a Map in parameter
+     *
+     * @param enchantments The Map of enchantements
+     * @return The ItemBuilder
      */
     public ItemBuilder enchantment(Map<Enchantment, Integer> enchantments) {
         this.enchantments.putAll(enchantments);
@@ -357,8 +360,9 @@ public class ItemBuilder {
 
     /**
      * Add an single enchantment to the item
+     *
      * @param enchantment The enchantement to add
-     * @param level The level of the enchantment
+     * @param level       The level of the enchantment
      * @return The ItemBuilder
      */
     public ItemBuilder addEnchantment(Enchantment enchantment, int level) {
@@ -370,9 +374,10 @@ public class ItemBuilder {
 
     /**
      * Remove all echantment from the item that match with the enchantement and the given level
+     *
      * @param enchantment The enchantment to remove
-     * @param level The level of the enchantment to remove
-     * @return
+     * @param level       The level of the enchantment to remove
+     * @return            The ItemBuilder
      */
     public ItemBuilder removeEnchantment(Enchantment enchantment, int level) {
         enchantments.entrySet().stream().filter(e -> e.getValue() == level).forEach(e -> {
@@ -385,6 +390,7 @@ public class ItemBuilder {
 
     /**
      * Remove some enchantments from the item by a collection of enchantments given in parameter
+     *
      * @param enchantments The enchantements to remove
      * @return The ItemBuilder
      */
@@ -399,6 +405,7 @@ public class ItemBuilder {
 
     /**
      * Remove some enchantments from the item by a collection of level that match the enchantments given in parameter
+     *
      * @param levels The levels of enchantments to remove
      * @return The ItemBuilder
      */
@@ -564,7 +571,8 @@ public class ItemBuilder {
 
     /**
      * Check if the item is unbreakable or not
-     * @return The state of the item breakability<br>
+     *
+     * @return The state of the item break ability<br>
      * <b>true</b> if unbreakable<br>
      * <b>false</b> if breakable<br>
      */
