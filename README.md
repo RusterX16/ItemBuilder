@@ -45,3 +45,5 @@ Then, anywhere on your code, you will able to get back the instance with the `fr
 <pre>
 ItemBuilder builder = ItemBuilder.from(sword);
 </pre>
+
+Using save method isn't requiered if you're building an item that will never been updated in the futur.
