@@ -5,7 +5,7 @@ Thank you for reading this repository. You're free to use this class in your pro
   
 - Creating ItemBuilder objects :  
   
-Instead of creating ItemStack like this :  
+Instead of creating ItemStack like that :  
   
 <pre>
 ItemStack diamond = new ItemStack(Material.DIAMOND, 1);
@@ -17,7 +17,7 @@ item.setItemMeta(meta);
 player.getInventory().add(diamond);
 </pre>
   
-You will be able to write this :  
+You will do able to create instances of ItemStack this way :  
   
 <pre>
 ItemStack diamond = new ItemBuilder(Material.DIAMOND, 1)
@@ -45,3 +45,5 @@ Then, anywhere on your code, you will be able to get back the instance with the 
 <pre>
 ItemBuilder builder = ItemBuilder.from(sword);
 </pre>
+
+Using save method isn't requiered if you're building an item that will never been updated in the futur.
