@@ -17,7 +17,7 @@ item.setItemMeta(meta);
 player.getInventory().add(diamond);
 </pre>
   
-You will do able to write this :  
+You will be able to write this :  
   
 <pre>
 ItemStack diamond = new ItemBuilder(Material.DIAMOND, 1)
@@ -30,7 +30,7 @@ player.getInventory().add(diamond);
     
 - Save your ItemBuilder instance :  
   
-Use the `save()` method to save the ItemBuilder instance to the momery if you want to edit one more time later :
+Use the `save()` method to save the ItemBuilder instance to the memory if you want to edit one more time later :
 <pre>
 ItemStack sword = new ItemBuilder(Material.IRON_SWORD)
         .addEnchantment(Enchantment.DAMAGE_ALL, 5)
@@ -40,7 +40,7 @@ ItemStack sword = new ItemBuilder(Material.IRON_SWORD)
         .build();
 </pre>
   
-Then, anywhere on your code, you will able to get back the instance with the `from(ItemStack)` method :  
+Then, anywhere on your code, you will be able to get back the instance with the `from(ItemStack)` method :  
   
 <pre>
 ItemBuilder builder = ItemBuilder.from(sword);

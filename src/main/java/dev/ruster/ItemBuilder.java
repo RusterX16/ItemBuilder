@@ -1,5 +1,6 @@
 package dev.ruster;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import net.kyori.adventure.text.Component;
@@ -294,6 +295,7 @@ public class ItemBuilder {
      *
      * @return The ItemBuilder
      */
+    @SuppressWarnings("UnusedReturnValue")
     public ItemBuilder clearLore() {
         lore.clear();
         meta.lore(lore);
@@ -307,7 +309,7 @@ public class ItemBuilder {
      * @param flags The flag to hide
      * @return The ItemBuilder
      */
-    public ItemBuilder hideFlag(ItemFlag... flags) {
+    public ItemBuilder hideFlag(ItemFlag @NotNull @NotEmpty ... flags) {
         this.flags.addAll(List.of(flags));
         meta.addItemFlags(flags);
         item.setItemMeta(meta);
@@ -329,7 +331,7 @@ public class ItemBuilder {
      * @param flags The flag to show
      * @return The ItemBuilder
      */
-    public ItemBuilder showFlag(ItemFlag... flags) {
+    public ItemBuilder showFlag(ItemFlag @NotNull @NotEmpty ... flags) {
         List.of(flags).forEach(this.flags::remove);
         meta.removeItemFlags(flags);
         item.setItemMeta(meta);
@@ -359,7 +361,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Add an single enchantment to the item
+     * Add a single enchantment to the item
      *
      * @param enchantment The enchantement to add
      * @param level       The level of the enchantment
@@ -373,7 +375,7 @@ public class ItemBuilder {
     }
 
     /**
-     * Remove all echantment from the item that match with the enchantement and the given level
+     * Remove all enchantment from the item that match with the enchantement and the given level
      *
      * @param enchantment The enchantment to remove
      * @param level       The level of the enchantment to remove
