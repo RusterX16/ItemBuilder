@@ -2,6 +2,7 @@ package dev.ruster;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -421,6 +422,14 @@ public class ItemBuilder {
     }
 
     /**
+     * Check if the item has some enchantments
+     * @return true if the item has some enchantments
+     */
+    public boolean hasEnchantments() {
+        return !enchantments.isEmpty();
+    }
+
+    /**
      * Change the amount of the item
      *
      * @param amount The amount to set
@@ -551,6 +560,14 @@ public class ItemBuilder {
      */
     public List<Component> getLore() {
         return lore;
+    }
+
+    /**
+     * Get the item enchantments
+     * @return The enchantments
+     */
+    public Map<Enchantment, Integer> getEnchantments() {
+        return enchantments;
     }
 
     /**
