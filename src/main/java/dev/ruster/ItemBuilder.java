@@ -1,8 +1,6 @@
 package dev.ruster;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 import net.kyori.adventure.text.Component;
 import org.bukkit.ChatColor;
@@ -124,28 +122,6 @@ public class ItemBuilder {
         enchantments.putAll(builder.enchantments);
         save = builder.save;
         item.setItemMeta(meta);
-    }
-
-    /**
-     * <p>Get the ItemBuilder instance from the ItemStack one.</p>
-     * <p>Will return <b>null</b> if the ItemStack hasn't been created from ItemBuilder class</p>
-     *
-     * @param item The ItemStack
-     * @return The ItemBuilder instance if exists in the list, <b>null</b> otherwise.
-     */
-    public static ItemBuilder from(@NotNull ItemStack item) {
-        return ITEM_BUILDER_LIST.stream().filter(ib -> ib.item == item).findFirst().orElse(null);
-    }
-
-    /**
-     * Save the instance into a Collection that allow you to recover it from anywhere in your code in case of modifying
-     *
-     * @return The ItemBuilder
-     */
-    public ItemBuilder save() {
-        ITEM_BUILDER_LIST.add(this);
-        this.save = true;
-        return this;
     }
 
     /**
@@ -310,7 +286,7 @@ public class ItemBuilder {
      * @param flags The flag to hide
      * @return The ItemBuilder
      */
-    public ItemBuilder hideFlag(ItemFlag @NotNull @NotEmpty ... flags) {
+    public ItemBuilder hideFlag(ItemFlag @NotNull ... flags) {
         this.flags.addAll(List.of(flags));
         meta.addItemFlags(flags);
         item.setItemMeta(meta);
@@ -332,7 +308,7 @@ public class ItemBuilder {
      * @param flags The flag to show
      * @return The ItemBuilder
      */
-    public ItemBuilder showFlag(ItemFlag @NotNull @NotEmpty ... flags) {
+    public ItemBuilder showFlag(ItemFlag @NotNull ... flags) {
         List.of(flags).forEach(this.flags::remove);
         meta.removeItemFlags(flags);
         item.setItemMeta(meta);
