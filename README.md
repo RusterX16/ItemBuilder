@@ -17,7 +17,7 @@ item.setItemMeta(meta);
 player.getInventory().add(diamond);
 </pre>
   
-You will do able to create instances of ItemStack this way :  
+You will be able to create instances of ItemStack this way :  
   
 <pre>
 ItemStack diamond = new ItemBuilder(Material.DIAMOND, 1)
